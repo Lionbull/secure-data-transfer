@@ -40,17 +40,19 @@
 </script>
 
 <div class="main-content">
-  <textarea bind:value={message} placeholder="Enter message"></textarea>
-  <div class="row">
-    <select bind:value={expiration}>
-      <option value={1 * 60}>1 Minute</option>
-      <option value={30 * 60}>30 Minutes</option>
-      <option value={60 * 60}>1 Hour</option>
-      <option value={24 * 60 * 60}>1 Day</option>
-      <option value={7 * 24 * 60 * 60}>1 Week</option>
-      <option value={30 * 24 * 60 * 60}>1 Month</option>
-    </select>
-    <button on:click={encryptMessage}>Encrypt</button>
+  <div class="encryption-field">
+    <textarea bind:value={message} placeholder="Enter message"></textarea>
+    <div class="row">
+      <select bind:value={expiration}>
+        <option value={1 * 60}>1 Minute</option>
+        <option value={30 * 60}>30 Minutes</option>
+        <option value={60 * 60}>1 Hour</option>
+        <option value={24 * 60 * 60}>1 Day</option>
+        <option value={7 * 24 * 60 * 60}>1 Week</option>
+        <option value={30 * 24 * 60 * 60}>1 Month</option>
+      </select>
+      <button on:click={encryptMessage}>Encrypt</button>
+    </div>
   </div>
   {#if key}
     <div class="result">
@@ -86,10 +88,31 @@
     margin: 50px auto;
     
   }
+
+  .encryption-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+
   textarea {
     width: 100%;
-    max-width: 600px;
-    height: 200px;
+    max-width: 90vw;
+    height: 100px;
     margin-bottom: 10px;
     box-sizing: border-box;
     padding: 10px;
@@ -108,14 +131,22 @@
   .result {
     margin-top: 20px;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 2px solid #007bff;
     border-radius: 5px;
+    background-color: #f9f9f9;
+
+    .info {
+      margin-bottom: 10px;
+      p {
+        margin-bottom: 15px;
+        margin-top: 0;
+      }
+    }
 
 
     .key-container, .url-container {
       display: flex;
       flex-direction: column;
-      // padding: 10px;
       p {
         font-size: 0.9rem;
         margin-bottom: 5px;
@@ -130,19 +161,18 @@
         cursor: pointer;
 
         &:hover {
-          background-color: #dadada;
+          background-color: #e6e6e6;
         }
       }
     }
   }
 
-  /* Toast notification styles */
   .toast {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4caf50;
+    background-color: #007bff;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
