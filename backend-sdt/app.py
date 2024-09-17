@@ -26,12 +26,13 @@ def encrypt():
     db.session.add(db_message)
     db.session.commit()
 
+    # Construct URL with GET parameters (IV, Tag, and ID)
+    decrypt_url = f"http://localhost:5173/decrypt?id={db_message.id}&iv={encrypted['iv']}&tag={encrypted['tag']}"
+
     return jsonify({
-        "id": db_message.id,
-        "key": encrypted["key"],
-        "iv": encrypted["iv"],
-        "tag": encrypted["tag"]
-    }), 201
+        "key": encrypted["key"],  # Separately provide the key
+        "url": decrypt_url  # URL for decryption with necessary params
+    }), 200
 
 @app.route("/decrypt/<int:id>", methods=["POST"])
 def decrypt(id):
