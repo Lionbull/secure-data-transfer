@@ -6,13 +6,14 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://SDT:SDT@localhost/SDT'
+CORS(app) # Allow CORS for all routes (limit to specific routes in production)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://SDT:SDT@localhost/SDT' # Set psql database URI: postgresql://<username>:<password>@localhost/<database_name>
 db.init_app(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db) # Initialize migration engine
 
 @app.route("/encrypt", methods=["POST"])
 def encrypt():
+    """ Encrypt a message and store it in the database """
     data = request.json
     message = data.get("message")
     expiration_time = int(data.get("expiration", 3600))  # Default: 1 hour
@@ -36,6 +37,7 @@ def encrypt():
 
 @app.route("/decrypt/<int:id>", methods=["POST"])
 def decrypt(id):
+    """ Decrypt a message using the provided key, IV, and tag """
     data = request.json
     key = data.get("key")
     iv = data.get("iv")

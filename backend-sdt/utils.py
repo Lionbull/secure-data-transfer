@@ -1,8 +1,8 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import os
-import base64
 
 def encrypt_message(plaintext: str):
+    """ Encrypt a message using AES-GCM and return the ciphertext, key, IV, and tag """
     key = os.urandom(32)  # AES 256-bit key
     iv = os.urandom(12)   # IV for AES-GCM
     cipher = Cipher(algorithms.AES(key), modes.GCM(iv))
@@ -17,6 +17,7 @@ def encrypt_message(plaintext: str):
 
 
 def decrypt_message(ciphertext_hex, key_hex, iv_hex, tag_hex):
+    """ Decrypt a message using AES-GCM and return the plaintext """
     # Decode the hex-encoded data back to bytes
     ciphertext = bytes.fromhex(ciphertext_hex)
     key = bytes.fromhex(key_hex)

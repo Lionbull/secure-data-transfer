@@ -6,8 +6,17 @@
 
   let showCopiedNotification: boolean = false;
 
+  // Replace with actual API URL of the backend
+  // Consider using environment variables / svelte environment for automatically setting prod and dev URLs
+  let apiURL = "http://localhost:5000";
+
+  /**
+   * Function to encrypt the message using the backend API
+   * Sends a POST request to the /encrypt endpoint with the message and expiration time
+   * API returns the encryption key and URL to access the encrypted message via decrypt page
+   */
   async function encryptMessage() {
-    const response = await fetch("http://localhost:5000/encrypt", {
+    const response = await fetch(`${apiURL}/encrypt`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message, expiration })
@@ -24,6 +33,12 @@
     console.log("Encrypted!", "Key:", key, "URL:", url);
   }
 
+  /**
+   * Function to copy the text to the clipboard
+   * Creates a temporary textarea element, sets the text to be copied, selects it, copies it to the clipboard, and removes the element
+   * Shows a notification that the text has been copied
+   * @param textToCopy - The text to be copied to the clipboard
+   */
   function copyToClipboard(textToCopy: string) {
     const el = document.createElement("textarea");
     el.value = textToCopy;
@@ -44,6 +59,7 @@
     <textarea bind:value={message} placeholder="Enter message"></textarea>
     <div class="row">
       <select bind:value={expiration}>
+        <!-- Add more expiration options if needed -->
         <option value={1 * 60}>1 Minute</option>
         <option value={30 * 60}>30 Minutes</option>
         <option value={60 * 60}>1 Hour</option>
@@ -86,7 +102,6 @@
   .main-content {
     max-width: 600px;
     margin: 50px auto;
-    
   }
 
   .encryption-field {
@@ -142,7 +157,6 @@
         margin-top: 0;
       }
     }
-
 
     .key-container, .url-container {
       display: flex;

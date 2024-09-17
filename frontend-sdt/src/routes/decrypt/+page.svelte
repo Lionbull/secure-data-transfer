@@ -1,10 +1,14 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    let decryptionKey = "";
+    let decryptionKey: string = "";
     let messageId: string | null, iv: string | null, tag: string | null;
     let decryptedMessage = "";
     let decryptionError: boolean = false;
+
+    // Replace with actual API URL of the backend
+    // Consider using environment variables / svelte environment for automatically setting prod and dev URLs
+    let apiURL = "http://localhost:5000";
 
     onMount(() => {
         // Get URL parameters
@@ -14,8 +18,13 @@
         tag = urlParams.get("tag");
     });
 
+    /**
+     * Function to decrypt the message using the backend API
+     * Sends a POST request to the /decrypt endpoint with the message ID, decryption key, IV, and tag
+     * API returns the decrypted message or an error message if message doesn't exist or expired
+     */
     async function decryptMessage() {
-        const response = await fetch(`http://localhost:5000/decrypt/${messageId}`, {
+        const response = await fetch(`${apiURL}/decrypt/${messageId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ key: decryptionKey, iv, tag })
